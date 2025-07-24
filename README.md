@@ -89,7 +89,7 @@ With a soft pastel design, cute pixel art, and a sprinkle of personality, KittyD
 
 #### Loading page
 
-![Image](https://i.imgur.com/hNtnDvp.png)
+![Image](https://i.imgur.com/MG0qwh2.png)
 
 ---
 
