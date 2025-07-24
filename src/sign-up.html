@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body class="sign-up-page">
+    <audio
+      id="click-sound"
+      src="../public/mouse-click.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="typing-sound"
+      src="../public/typing-sound.mp3"
+      preload="auto"
+    ></audio>
+    <div class="form-container signup-form-container">
+      <h2 class="signup-title">Create Account</h2>
+      <form
+        method="POST"
+        action="http://localhost:3000/auth/register"
+        class="signup-form"
+      >
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          class="signup-input username-input"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="signup-input password-input"
+          required
+        />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          class="signup-input confirm-input"
+          required
+        />
+
+        <label for="characterInput" class="signup-label"
+          >Choose Your Character:</label
+        >
+
+        <div class="custom-select-wrapper">
+          <div class="custom-select" id="characterDropdown" tabindex="0">
+            <span class="selected-option">
+              <img src="../public/images/kitty/icons/kitty.ico" alt="Kitty" /> Kitty
+            </span>
+            <ul class="options-list">
+              <li data-value="kitty">
+                <img src="../public/images/kitty/icons/kitty.ico" alt="Kitty" /> Kitty
+              </li>
+              <li data-value="star">
+                <img src="../public/images/star/icons/star.ico" alt="Star" /> Star
+              </li>
+              <li data-value="ema">
+                <img src="../public/images/ema/icons/ema.ico" alt="Ema" /> Ema
+              </li>
+            </ul>
+          </div>
+          <input type="hidden" name="character" id="characterInput" required />
+        </div>
+
+        <button type="submit" class="signup-button">Sign Up</button>
+      </form>
+      <p class="signin-link-text">
+        Already have an account?
+        <a href="sign-in.html" class="signin-link">Sign In</a>
+      </p>
+    </div>
+  </body>
+</html>

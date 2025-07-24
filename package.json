@@ -1,0 +1,58 @@
+{
+  "name": "kittydesk",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12",
+    "electron-reload": "^2.0.0-alpha.1",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.1.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.2",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1"
+  },
+  "build": {
+    "appId": "com.bobo.kittydesk",
+    "productName": "KittyDesk",
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "package.json",
+      ".env",
+      "public/**/*",
+      "style.css",
+      "app.js",
+      "index.html",
+      "recipes.html",
+      "sign-in.html",
+      "sign-up.html",
+      "src/**/*",
+      "backend/**/*",
+      "services/**/*",
+      "uploads"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "icon": "src/assets/icons/app-icon.icns",
+    "win": {
+      "icon": "src/assets/icons/app-icon.ico"
+    }
+  }
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>🎀 KittyDesk 🎀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="recipe-page">
+    <audio
+      id="click-sound"
+      src="../public/mouse-click.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="typing-sound"
+      src="../public/typing-sound.mp3"
+      preload="auto"
+    ></audio>
+
+    <video id="loading-screen" autoplay muted playsinline>
+      <source src="../public/kittydesk.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <div id="fallback-message" class="hidden">
+      <h2>Welcome to KittyDesk!</h2>
+      <p>Loading failed. Please refresh or try again later.</p>
+    </div>
+
+    <header>
+      <h1 class="recipe-title">My Recipe Book</h1>
+      <a href="index.html" id="back-home">
+        <img src="../public/images/home.png" alt="Back to Home" />
+      </a>
+    </header>
+
+    <button id="toggle-form-btn">Add Recipe</button>
+
+    <form id="recipe-form" class="hidden">
+      <input type="text" id="title" placeholder="Recipe Title" required />
+      <textarea id="description" placeholder="Description"></textarea>
+      <textarea
+        type="text"
+        id="ingredients"
+        placeholder="Ingredients (comma separated)"
+      ></textarea>
+      <textarea id="steps" placeholder="Steps"></textarea>
+      <input type="file" id="image" accept="image/*" />
+      <button type="submit">Submit Recipe</button>
+    </form>
+
+    <section id="recipes-section">
+      <div id="recipe-list"></div>
+    </section>
+
+    <script>
+      // 🎀 Sounds
+      const sound = document.getElementById('click-sound')
+
+      document.addEventListener('click', (event) => {
+        const clickable = event.target.closest(
+          'button, input, select, textarea, label, a'
+        )
+        if (!clickable) return
+
+        if (clickable.tagName.toLowerCase() === 'a') {
+          event.preventDefault()
+          sound.currentTime = 0
+          sound.play()
+
+          const href = clickable.href
+          setTimeout(() => {
+            window.location.href = href
+          }, 200)
+        } else {
+          sound.currentTime = 0
+          sound.play()
+        }
+      })
+
+      const typingSound = document.getElementById('typing-sound')
+
+      document.addEventListener('input', (event) => {
+        const tag = event.target.tagName.toLowerCase()
+        if (tag === 'input' || tag === 'textarea') {
+          typingSound.currentTime = 0
+          typingSound.play()
+        }
+      })
+      // 🎀 Main Recipes Page Logic
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          document.getElementById('loading-screen').style.display = 'none'
+        }, 2000)
+      })
+
+      // 🎀 video fails to load
+      const video = document.getElementById('loading-screen')
+      const fallback = document.getElementById('fallback-message')
+
+      video.addEventListener('error', () => {
+        video.style.display = 'none'
+        fallback.classList.remove('hidden')
+      })
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('recipe-form')
+        const toggleBtn = document.getElementById('toggle-form-btn')
+        const list = document.getElementById('recipe-list')
+        const token = localStorage.getItem('token')
+
+        const getUserIdFromToken = (token) => {
+          try {
+            const payload = JSON.parse(atob(token.split('.')[1]))
+            return payload.id
+          } catch {
+            return null
+          }
+        }
+
+        const userId = getUserIdFromToken(token)
+        let recipes = []
+
+        let editMode = false
+        let editingRecipeId = null
+        let currentImage = ''
+
+        toggleBtn.addEventListener('click', () => {
+          form.classList.toggle('hidden')
+          if (!form.classList.contains('hidden')) {
+            editMode = false
+            editingRecipeId = null
+            currentImage = ''
+            form.reset()
+          }
+        })
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault()
+
+          const title = document.getElementById('title').value
+          const description = document.getElementById('description').value
+          const ingredients = document
+            .getElementById('ingredients')
+            .value.split(',')
+            .map((i) => i.trim())
+          const steps = document
+            .getElementById('steps')
+            .value.split('\n')
+            .map((s) => s.trim())
+          const imageFile = document.getElementById('image').files[0]
+
+          const formData = new FormData()
+          formData.append('title', title)
+          formData.append('description', description)
+          formData.append('ingredients', JSON.stringify(ingredients))
+          formData.append('steps', JSON.stringify(steps))
+          formData.append('user', userId)
+
+          if (editMode && editingRecipeId) {
+            if (imageFile) {
+              formData.append('image', imageFile)
+            } else if (currentImage) {
+              formData.append('existingImage', currentImage)
+            }
+          } else {
+            if (imageFile) {
+              formData.append('image', imageFile)
+            }
+          }
+
+          try {
+            let res
+            if (editMode && editingRecipeId) {
+              res = await fetch(
+                `http://localhost:3000/recipes/${editingRecipeId}`,
+                {
+                  method: 'PUT',
+                  headers: {
+                    Authorization: `Bearer ${token}`
+                  },
+                  body: formData
+                }
+              )
+            } else {
+              res = await fetch('http://localhost:3000/recipes', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`
+                },
+                body: formData
+              })
+            }
+
+            if (!res.ok) throw new Error('Failed to save recipe')
+            alert(
+              editMode
+                ? 'Recipe updated successfully!'
+                : 'Recipe added successfully!'
+            )
+
+            form.reset()
+            form.classList.add('hidden')
+            editMode = false
+            editingRecipeId = null
+            currentImage = ''
+            loadRecipes()
+          } catch (err) {
+            alert('Error saving recipe')
+            console.error(err)
+          }
+        })
+
+        list.addEventListener('click', async (e) => {
+          if (e.target.classList.contains('delete-btn')) {
+            const recipeId = e.target.dataset.id
+            if (confirm('Are you sure you want to delete this recipe?')) {
+              try {
+                const res = await fetch(
+                  `http://localhost:3000/recipes/${recipeId}`,
+                  {
+                    method: 'DELETE',
+                    headers: {
+                      Authorization: `Bearer ${token}`
+                    }
+                  }
+                )
+                if (!res.ok) throw new Error('Failed to delete recipe')
+                alert('Recipe deleted successfully')
+                loadRecipes()
+              } catch (err) {
+                alert('Error deleting recipe')
+                console.error(err)
+              }
+            }
+          }
+
+          if (e.target.classList.contains('edit-btn')) {
+            const recipeId = e.target.dataset.id
+            const recipe = recipes.find((r) => r._id === recipeId)
+            if (!recipe) return alert('Recipe not found')
+
+            document.getElementById('title').value = recipe.title
+            document.getElementById('description').value = recipe.description
+            document.getElementById('ingredients').value =
+              recipe.ingredients.join(', ')
+            document.getElementById('steps').value = recipe.steps.join('\n')
+
+            currentImage = recipe.images?.[0] || ''
+
+            form.classList.remove('hidden')
+            editMode = true
+            editingRecipeId = recipeId
+            window.scrollTo(0, 0)
+          }
+        })
+
+        async function loadRecipes() {
+          if (!userId) return
+
+          try {
+            const res = await fetch(`http://localhost:3000/recipes/${userId}`, {
+              headers: { Authorization: `Bearer ${token}` }
+            })
+            recipes = await res.json()
+
+            list.innerHTML = ''
+
+            recipes.forEach((r) => {
+              const card = document.createElement('div')
+              card.classList.add('recipe-card')
+              card.innerHTML = `
+                <div class="scrollable-content">
+                <h3>${r.title}</h3>
+                <p>Description: ${r.description}</p>
+                ${
+                  r.images?.[0]
+                    ? `<img src="http://localhost:3000/uploads/${r.images[0]}" width="100" />`
+                    : ''
+                }
+                <h4>Ingredients:</h4>
+                <ul>
+                  ${
+                    r.ingredients?.map((ing) => `<li>${ing}</li>`).join('') ||
+                    ''
+                  }
+                </ul>
+                <h4>Steps:</h4>
+                <ol>
+                  ${r.steps?.map((step) => `<li>${step}</li>`).join('') || ''}
+                </ol>
+                <div class="button-wrapper">
+                <button class="edit-btn" data-id="${r._id}">Edit</button>
+                <button class="delete-btn" data-id="${r._id}">Delete</button>
+                </div>
+                </div>
+              `
+              list.appendChild(card)
+            })
+          } catch (err) {
+            console.error('Error loading recipes:', err)
+          }
+        }
+
+        loadRecipes()
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <title>🎀 KittyDesk 🎀</title>
+  </head>
+  <body class="home-page">
+    <audio
+      id="click-sound"
+      src="../public/mouse-click.mp3"
+      preload="auto"
+    ></audio>
+
+    <video id="loading-screen" autoplay muted playsinline>
+      <source src="../public/kittydesk.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <div id="fallback-message" class="hidden">
+      <h2>Welcome to KittyDesk!</h2>
+      <p>Loading failed. Please refresh or try again later.</p>
+    </div>
+
+    <h1>KittyDesk 🎀</h1>
+
+    <div class="container">
+      <section id="buddy-section">
+        <h2>Your Buddy</h2>
+        <div id="buddy-character" class="character-container">
+          <img id="base-image" src="" alt="Base Character" />
+        </div>
+
+        <div class="outfit-buttons-wrapper">
+          <button class="outfit-button" id="default-btn">
+            <img src="../public/images/icons/default.png" alt="Default" />
+          </button>
+          <button class="outfit-button" id="dress-btn">
+            <img src="../public/images/icons/dress.png" alt="Dress" />
+          </button>
+          <button class="outfit-button" id="casual-btn">
+            <img src="../public/images/icons/casual.png" alt="Casual" />
+          </button>
+          <button class="outfit-button" id="pjs-btn">
+            <img src="../public/images/icons/pjs.png" alt="Pajamas" />
+          </button>
+        </div>
+      </section>
+
+      <section id="mood-section">
+        <h2>Mood</h2>
+        <select name="mood" id="mood-status">
+          <option value="happy">Happy</option>
+          <option value="coffee">Drink Coffee</option>
+          <option value="sad">Sad</option>
+          <option value="cook">Cook</option>
+          <option value="hug">Need Hug!</option>
+          <option value="tea">Drink Tea</option>
+          <option value="sleep">Sleepy</option>
+          <option value="watch">Watch</option>
+          <option value="baby">Babysit</option>
+          <option value="work">Work</option>
+          <option value="family">Family Time</option>
+        </select>
+
+        <div id="mood-display" class="mood-preview"></div>
+        <div id="mood-character" class="character-container">
+          <img id="base-image-mood" src="" alt="Base Character" />
+        </div>
+      </section>
+
+      <section id="timer-section">
+        <h2>Focus Timer</h2>
+        <label for="custom-time">Set Time By (minutes):</label>
+        <input type="number" id="custom-time" min="1" max="120" value="0" />
+
+        <div id="timer-display">00:00</div>
+        <div class="button-wrapper">
+          <button id="timer-start">Start</button>
+          <button id="timer-stop">Pause</button>
+          <button id="timer-reset">Reset</button>
+        </div>
+      </section>
+
+      <section id="recipe-section">
+        <h2>Recipe Book</h2>
+        <div class="button-wrapper">
+          <a href="recipes.html">
+            <img
+              class="recipe-book-img"
+              src="../public/images/book.png"
+              alt="Default"
+            />
+          </a>
+        </div>
+      </section>
+      <button id="sign-out-Btn">Sign Out</button>
+    </div>
+
+    <script>
+      // 🎀 Sign-out Logic
+      document.getElementById('sign-out-Btn').addEventListener('click', () => {
+        const clickSound = document.getElementById('click-sound')
+        clickSound.play()
+
+        clickSound.onended = () => {
+          localStorage.removeItem('token')
+          window.location.href = 'sign-in.html'
+        }
+      })
+
+      // 🎀 video fails to load
+      const video = document.getElementById('loading-screen')
+      const fallback = document.getElementById('fallback-message')
+
+      video.addEventListener('error', () => {
+        video.style.display = 'none'
+        fallback.classList.remove('hidden')
+      })
+    </script>
+
+    <script src="app.js"></script>
+  </body>
+</html>

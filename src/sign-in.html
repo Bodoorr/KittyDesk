@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sign In</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body class="sign-in-page">
+    <audio
+      id="click-sound"
+      src="../public/mouse-click.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="typing-sound"
+      src="../public/typing-sound.mp3"
+      preload="auto"
+    ></audio>
+    <div class="form-container signin-form-container">
+      <h2 class="signin-title">Welcome Back</h2>
+      <form id="loginForm" class="signin-form">
+        <input
+          type="text"
+          id="username"
+          class="signin-input username-input"
+          placeholder="Username"
+          required
+        />
+        <input
+          type="password"
+          id="password"
+          class="signin-input password-input"
+          placeholder="Password"
+          required
+        />
+        <button type="submit" class="signin-button">Sign In</button>
+      </form>
+      <p class="signup-link-text">
+        Don't have an account?
+        <a href="sign-up.html" class="signup-link">Sign Up</a>
+      </p>
+    </div>
+  </body>
+</html>
