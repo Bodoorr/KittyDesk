@@ -55,6 +55,10 @@
     </section>
 
     <script>
+      const token = localStorage.getItem('token')
+      if (!token) {
+        window.location.href = '/sign-in.html'
+      }
       // 🎀 Sounds
       const sound = document.getElementById('click-sound')
 
@@ -274,10 +278,10 @@
                 <h3>${r.title}</h3>
                 <p>Description: ${r.description}</p>
               ${
-              r.images?.[0]
-                ? `<img src="http://localhost:3000/uploads/${r.images[0]}" />`
-                : ''
-            }
+                r.images?.[0]
+                  ? `<img src="http://localhost:3000/uploads/${r.images[0]}" />`
+                  : ''
+              }
                 <h4>Ingredients:</h4>
                 <ul>
                   ${
