@@ -3,67 +3,24 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "dev": "electron .",
-    "build": "electron-builder",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "start": "node main.js",
+    "dev": "nodemon main.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@electron-forge/cli": "^7.8.1",
-    "@electron-forge/maker-deb": "^7.8.1",
-    "@electron-forge/maker-rpm": "^7.8.1",
-    "@electron-forge/maker-squirrel": "^7.8.1",
-    "@electron-forge/maker-zip": "^7.8.1",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
-    "@electron-forge/plugin-fuses": "^7.8.1",
-    "@electron/fuses": "^1.8.0",
-    "electron": "^37.2.0",
-    "electron-reload": "^2.0.0-alpha.1",
     "nodemon": "^3.1.10"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.1.0",
-    "electron-squirrel-startup": "^1.0.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.2",
     "morgan": "^1.10.0",
     "multer": "^2.0.1"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "src/assets/icons/app-icon"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "kittydesk"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
   }
 }

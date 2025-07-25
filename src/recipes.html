@@ -273,11 +273,11 @@
                 <div class="scrollable-content">
                 <h3>${r.title}</h3>
                 <p>Description: ${r.description}</p>
-                ${
-                  r.images?.[0]
-                    ? `<img src="http://localhost:3000/uploads/${r.images[0]}" width="100" />`
-                    : ''
-                }
+              ${
+              r.images?.[0]
+                ? `<img src="http://localhost:3000/uploads/${r.images[0]}" />`
+                : ''
+            }
                 <h4>Ingredients:</h4>
                 <ul>
                   ${
