@@ -1,7 +1,5 @@
 console.log('script loaded!')
-
-const BASE_URL = window.BASE_URL || 'http://localhost:3000'
-
+import { BASE_URL } from './api.js'
 
 // 🎀 Sounds
 const sound = document.getElementById('click-sound')
