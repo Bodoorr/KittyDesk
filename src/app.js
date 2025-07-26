@@ -1,5 +1,8 @@
 console.log('script loaded!')
 
+const BASE_URL = window.BASE_URL || 'http://localhost:3000'
+
+
 // 🎀 Sounds
 const sound = document.getElementById('click-sound')
 document.addEventListener('click', (event) => {
@@ -150,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!token) return
 
   try {
-    const res = await fetch('http://localhost:3000/auth/session', {
+    const res = await fetch(`${BASE_URL}/auth/session`, {
       headers: { Authorization: `Bearer ${token}` }
     })
 
@@ -201,7 +204,7 @@ if (loginForm) {
     const username = document.getElementById('username').value
     const password = document.getElementById('password').value
 
-    fetch('http://localhost:3000/auth/login', {
+    fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
@@ -271,7 +274,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/characters/${userId}`, {
+    const res = await fetch(`${BASE_URL}/characters/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -300,17 +303,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateCharacterMoodImage(selectedCharacter, mood)
 
         try {
-          const res = await fetch(
-            `http://localhost:3000/characters/${userId}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-              },
-              body: JSON.stringify({ mood })
-            }
-          )
+          const res = await fetch(`${BASE_URL}/characters/${userId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ mood })
+          })
 
           if (!res.ok) throw new Error('Failed to update mood')
           const updated = await res.json()
@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadCharacter() {
     try {
-      const res = await fetch(`http://localhost:3000/characters/${userId}`, {
+      const res = await fetch(`${BASE_URL}/characters/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       if (!res.ok) throw new Error('Failed to fetch character')
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function saveOutfitToServer() {
     try {
-      const res = await fetch(`http://localhost:3000/characters/${userId}`, {
+      const res = await fetch(`${BASE_URL}/characters/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

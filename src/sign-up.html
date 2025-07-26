@@ -18,11 +18,7 @@
     ></audio>
     <div class="form-container signup-form-container">
       <h2 class="signup-title">Create Account</h2>
-      <form
-        method="POST"
-        action="http://localhost:3000/auth/register"
-        class="signup-form"
-      >
+      <form method="POST" class="signup-form">
         <input
           type="text"
           name="username"
@@ -52,14 +48,17 @@
         <div class="custom-select-wrapper">
           <div class="custom-select" id="characterDropdown" tabindex="0">
             <span class="selected-option">
-              <img src="../public/images/kitty/icons/kitty.ico" alt="Kitty" /> Kitty
+              <img src="../public/images/kitty/icons/kitty.ico" alt="Kitty" />
+              Kitty
             </span>
             <ul class="options-list">
               <li data-value="kitty">
-                <img src="../public/images/kitty/icons/kitty.ico" alt="Kitty" /> Kitty
+                <img src="../public/images/kitty/icons/kitty.ico" alt="Kitty" />
+                Kitty
               </li>
               <li data-value="star">
-                <img src="../public/images/star/icons/star.ico" alt="Star" /> Star
+                <img src="../public/images/star/icons/star.ico" alt="Star" />
+                Star
               </li>
               <li data-value="ema">
                 <img src="../public/images/ema/icons/ema.ico" alt="Ema" /> Ema
@@ -76,5 +75,10 @@
         <a href="sign-in.html" class="signin-link">Sign In</a>
       </p>
     </div>
+    <script>
+      document.querySelector(
+        '.signup-form'
+      ).action = `${BASE_URL}/auth/register`
+    </script>
   </body>
 </html>

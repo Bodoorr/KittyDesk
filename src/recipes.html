@@ -59,6 +59,9 @@
       if (!token) {
         window.location.href = '/sign-in.html'
       }
+
+      const BASE_URL = window.BASE_URL || 'http://localhost:3000'
+
       // 🎀 Sounds
       const sound = document.getElementById('click-sound')
 
@@ -111,7 +114,6 @@
         const form = document.getElementById('recipe-form')
         const toggleBtn = document.getElementById('toggle-form-btn')
         const list = document.getElementById('recipe-list')
-        const token = localStorage.getItem('token')
 
         const getUserIdFromToken = (token) => {
           try {
@@ -176,18 +178,15 @@
           try {
             let res
             if (editMode && editingRecipeId) {
-              res = await fetch(
-                `http://localhost:3000/recipes/${editingRecipeId}`,
-                {
-                  method: 'PUT',
-                  headers: {
-                    Authorization: `Bearer ${token}`
-                  },
-                  body: formData
-                }
-              )
+              res = await fetch(`${BASE_URL}/recipes/${editingRecipeId}`, {
+                method: 'PUT',
+                headers: {
+                  Authorization: `Bearer ${token}`
+                },
+                body: formData
+              })
             } else {
-              res = await fetch('http://localhost:3000/recipes', {
+              res = await fetch(`${BASE_URL}/recipes`, {
                 method: 'POST',
                 headers: {
                   Authorization: `Bearer ${token}`
@@ -220,15 +219,12 @@
             const recipeId = e.target.dataset.id
             if (confirm('Are you sure you want to delete this recipe?')) {
               try {
-                const res = await fetch(
-                  `http://localhost:3000/recipes/${recipeId}`,
-                  {
-                    method: 'DELETE',
-                    headers: {
-                      Authorization: `Bearer ${token}`
-                    }
+                const res = await fetch(`${BASE_URL}/recipes/${recipeId}`, {
+                  method: 'DELETE',
+                  headers: {
+                    Authorization: `Bearer ${token}`
                   }
-                )
+                })
                 if (!res.ok) throw new Error('Failed to delete recipe')
                 alert('Recipe deleted successfully')
                 loadRecipes()
@@ -263,7 +259,7 @@
           if (!userId) return
 
           try {
-            const res = await fetch(`http://localhost:3000/recipes/${userId}`, {
+            const res = await fetch(`${BASE_URL}/recipes/${userId}`, {
               headers: { Authorization: `Bearer ${token}` }
             })
             recipes = await res.json()
@@ -279,7 +275,7 @@
                 <p>Description: ${r.description}</p>
               ${
                 r.images?.[0]
-                  ? `<img src="http://localhost:3000/uploads/${r.images[0]}" />`
+                  ? `<img src="${BASE_URL}/uploads/${r.images[0]}" />`
                   : ''
               }
                 <h4>Ingredients:</h4>

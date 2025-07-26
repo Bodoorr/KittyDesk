@@ -1,6 +1,9 @@
 import Axios from 'axios'
 
-export const BASE_URL = 'http://localhost:3001'
+export const BASE_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:3000'
+    : 'https://kittydesk.onrender.com'
 
 const Client = Axios.create({ baseURL: BASE_URL })
 
