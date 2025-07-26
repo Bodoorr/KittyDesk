@@ -1,5 +1,9 @@
 console.log('script loaded!')
-import { BASE_URL } from '../services/api'
+
+const BASE_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:3000'
+    : 'https://kittydesk.onrender.com'
 
 // 🎀 Sounds
 const sound = document.getElementById('click-sound')
