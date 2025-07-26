@@ -1,5 +1,5 @@
 console.log('script loaded!')
-import { BASE_URL } from './api.js'
+import { BASE_URL } from '../services/api'
 
 // 🎀 Sounds
 const sound = document.getElementById('click-sound')
