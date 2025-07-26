@@ -5,7 +5,7 @@ const express = require('express')
 // const http = require('http')
 const cors = require('cors')
 const logger = require('morgan')
-// const fs = require('fs')
+const fs = require('fs')
 
 require('dotenv').config({ path: path.join(__dirname, '.env') })
 
@@ -16,6 +16,12 @@ const connectDB = require('./backend/db/index')
 // if (!fs.existsSync(uploadDir)) {
 //   fs.mkdirSync(uploadDir, { recursive: true })
 // }
+
+const uploadDir = path.join(__dirname, 'backend', 'uploads')
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir)
+}
+
 // Routers
 const AuthRouter = require('./backend/routes/AuthRouter')
 const UserRouter = require('./backend/routes/UserRouter')
